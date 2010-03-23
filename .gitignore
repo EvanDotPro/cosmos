@@ -1,0 +1,4 @@
+application/data/cache
+application/data/logs
+application/data/sessions
+!.gitignore
