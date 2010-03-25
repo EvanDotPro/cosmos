@@ -11,7 +11,7 @@ class ZendC_Controller_Plugin_AutoloadController extends Zend_Controller_Plugin_
 //        }
         $file = $dispatcher->getControllerClass($request).'.php';
         // TODO: Dynamically only include enabled plugins, etc.
-        $plugins = array('csr_available','calc');
+        $plugins = array('csr_available','calc','sample');
         foreach($plugins as $plugin){
             $scriptPath = APPLICATION_PATH . "/plugins/{$plugin}/modules/ext-{$request->getModuleName()}/views/";
             if(is_dir($scriptPath)){
