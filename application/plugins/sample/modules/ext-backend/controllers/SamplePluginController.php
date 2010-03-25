@@ -17,6 +17,6 @@ class Backend_SamplePluginController extends Zend_Controller_Action
     public function updateContentAction()
     {
         file_put_contents($this->_filename, $_POST['content']);
-        $this->_redirect('/sample-plugin');
+        return $this->_helper->redirector('index','sample-plugin','backend');
     }
 }
