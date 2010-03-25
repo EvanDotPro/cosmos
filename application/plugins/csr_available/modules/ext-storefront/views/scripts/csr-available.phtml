@@ -1,0 +1,9 @@
+<? if(date("N") <= 5 && date("G") >= 8 && date("G") < 17): ?>
+<span class="status">
+	Current Status: <span class="green">Available</span>
+</span>
+<? else: ?>
+<span class="status">
+	Current Status: <span class="red">Unavailable</span>
+</span>
+<? endif; ?>

@@ -14,7 +14,7 @@
  * to license@cosmoscommerce.org so we can send you a copy immediately.
  *
  * @category   Cosmos
- * @package	   Cosmos_Api
+ * @package    Cosmos_Api
  * @copyright  Copyright (c) 2010 Cosmos Team (http://cosmoscommerce.org/)
  * @license    http://cosmoscommerce.org/license     Dual licensed under the MIT or GPL Version 2 licenses
  */

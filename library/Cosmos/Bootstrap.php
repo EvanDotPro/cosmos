@@ -9,8 +9,8 @@ class Cosmos_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         $this->bootstrap('multidb');
         
-        $db = $resource->getDb('master');
-        Zend_Registry::set('db',$db);
+        $masterDb = $resource->getDefaultDb(true);
+        Zend_Registry::set('dbw',$masterDb);
     }
     
     public function initLog()

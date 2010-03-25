@@ -158,6 +158,13 @@ class Cosmos_Profiler
 	
 	public static function _toFirebug()
 	{
+//	    Zend_Wildfire_Plugin_FirePhp::getInstance()->group('Profiling');
+        $message = new Zend_Wildfire_Plugin_FirePhp_Message(Zend_Wildfire_Plugin_FirePhp::GROUP_START, null);
+//        $message->setStyle(Zend_Wildfire_Plugin_FirePhp::GROUP_START);
+        $message->setLabel('Test Group');
+        $message->setOption('Color','#000000');
+        $message->setOption('Collapsed','true');
+        Zend_Wildfire_Plugin_FirePhp::getInstance()->send($message);
 	    $timers = self::getTimers();
 	    $rows = array();
 	    $rows[] = array('Name', 'Time', 'Count', 'Real Mem', 'Emallac');
@@ -177,6 +184,7 @@ class Cosmos_Profiler
         );
         
         Zend_Registry::get('log')->table($table);
+        Zend_Wildfire_Plugin_FirePhp::getInstance()->groupEnd();
         Zend_Wildfire_Channel_HttpHeaders::getInstance()->flush();
 	}
 

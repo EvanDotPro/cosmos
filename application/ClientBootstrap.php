@@ -1,9 +1,10 @@
 <?php
 class ClientBootstrap extends Cosmos_Bootstrap
 {
-    protected function _initDatabase()
+    protected function _initCosmosOptions()
     {
-        $this->initDatabase();
+        $options = $this->getOptions();
+        Zend_Registry::set('options', new Zend_Config($options['cosmos']));
     }
     
     protected function _initLog()
@@ -14,18 +15,11 @@ class ClientBootstrap extends Cosmos_Bootstrap
     protected function _initClientSession()
     {
         $this->bootstrap('session');
-        $options = $this->getOptions();
-        
-        Cosmos_Sso::initiate($options['cosmos']['namespace']);
-    }
-    
-    protected function _initTheme()
-    {
-        $options = $this->getOptions();
-        defined('COSMOS_THEME') 
-            || define('COSMOS_THEME',
-			(isset($options['cosmos']['theme']) ? $options['cosmos']['theme']
-											: 'default'));
+        if(!$namespace = Zend_Registry::get('options')->sharedsession->group){
+            $namespace = Zend_Registry::get('options')->store->id;
+        }
+        Zend_Registry::set('csession', new Zend_Session_Namespace("cosmos_{$namespace}"));
+//        Cosmos_Sso::initiate($options['cosmos']['namespace']);
     }
     
     protected function _initApiClient()
@@ -39,5 +33,17 @@ class ClientBootstrap extends Cosmos_Bootstrap
 		} catch (Exception $e){
 		    Zend_Registry::get('log')->err($e);
 		}
+    }
+    
+    protected function _initZFDebug()
+    {
+        if ($this->hasOption('zfdebug'))
+        {
+            $autoloader = Zend_Loader_Autoloader::getInstance();
+            $autoloader->registerNamespace('ZFDebug');
+            $this->bootstrap('FrontController');
+            $zfdebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
+            $this->getResource('FrontController')->registerPlugin($zfdebug);
+        }
     }
 }

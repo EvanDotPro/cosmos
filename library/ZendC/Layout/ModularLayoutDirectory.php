@@ -5,7 +5,7 @@ class ZendC_Layout_ModularLayoutDirectory
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
         $moduleName = $request->getModuleName();
-        $path = APPLICATION_PATH . "/modules/{$moduleName}/views/layouts";
+        $path = APPLICATION_PATH . "/core/modules/{$moduleName}/views/layouts";
         if(is_dir($path)){
             $this->getLayout()->setLayoutPath($path);
         }

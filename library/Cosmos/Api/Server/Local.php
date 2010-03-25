@@ -57,7 +57,7 @@ class Cosmos_Api_Server_Local extends Zend_Server_Abstract
         $callback = $this->getFunctions()->getMethod($request->getMethod())->getCallback();
         $className = $callback->getClass();
         $methodName = $callback->getMethod();
-        return call_user_func_array(array($className, $methodName), $request->getParams());
+        return call_user_func_array(array(new $className(), $methodName), $request->getParams());
     }
     
     public function cosmosHandle($request)

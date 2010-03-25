@@ -14,7 +14,7 @@
  * to license@cosmoscommerce.org so we can send you a copy immediately.
  *
  * @category   Cosmos
- * @package	   Cosmos_Bootstrap
+ * @package    Cosmos_Bootstrap
  * @copyright  Copyright (c) 2010 Cosmos Team (http://cosmoscommerce.org/)
  * @license    http://cosmoscommerce.org/license     Dual licensed under the MIT or GPL Version 2 licenses
  */
@@ -45,6 +45,8 @@ defined('APPLICATION_HOST')
 	|| define('APPLICATION_HOST',
 			(getenv('APPLICATION_HOST') ? getenv('APPLICATION_HOST')
 											: $_SERVER['HTTP_HOST']));
+
+define('REQUEST_MICROTIME', microtime(true));
 
 // Set the include path
 set_include_path(implode(PATH_SEPARATOR, array(LIBRARY_PATH,'.')));
