@@ -50,6 +50,7 @@ class Cosmos_Api_Client_Local
     public function __construct()
     {
         $this->_server = new Cosmos_Api_Server();
+        Zend_Registry::set('server', $this->_server);
     }
     
     /**
@@ -67,4 +68,5 @@ class Cosmos_Api_Client_Local
         return $response;
 //        return $response->getResponseValue();
     }
+    
 }

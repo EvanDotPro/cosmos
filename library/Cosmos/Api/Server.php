@@ -57,7 +57,7 @@ class Cosmos_Api_Server
 	    if($version == $this->_version){
 	        return;
 	    }
-	    $path = APPLICATION_PATH . "/services/{$version}";
+	    $path = APPLICATION_PATH . "/core/services/{$version}";
 	    $file = "{$path}/services.ini";
 	    if(!file_exists($file)){
 			throw new Cosmos_Api_Server_Exception("Invalid API version specified: {$version}", 404);
@@ -183,7 +183,7 @@ class Cosmos_Api_Server
 	    if(!$this->_version){
 	        return false;
 	    }
-	    $path = APPLICATION_PATH . "/services/{$this->_version}";
+	    $path = APPLICATION_PATH . "/core/services/{$this->_version}";
 	    $iniFile = "{$path}/services.ini";
 	    $config = new Zend_Config_Ini($iniFile);
 		$config = $config->toArray();

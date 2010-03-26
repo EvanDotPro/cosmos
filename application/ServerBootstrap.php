@@ -9,6 +9,7 @@ class ServerBootstrap extends Cosmos_Bootstrap
 	protected function _initApiServer()
 	{
 	    $server = new Cosmos_Api_Server(new Cosmos_Api_Request_Http());
+	    Zend_Registry::set('server', $server);
 	    var_dump($server->handle()); die('done');
 	}
     
