@@ -123,6 +123,28 @@ class Cosmos_Addon
             Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($defaultModuleDirectory . '/views/layouts');
         }
         foreach($this->_addons as $addon){
+            
+            // Add any services provided by the add-on
+			$iniFile = APPLICATION_PATH . "/addons/{$addon}/services/services.ini";
+			if (Zend_Loader::isReadable($iniFile)) {
+				$path = APPLICATION_PATH . "/addons/{$addon}/services";
+				$config = new Zend_Config_Ini($iniFile);
+				$config = $config->toArray();
+				if ($config['services'] !== null) {
+				    foreach($config['services'] as $namespace => $service)
+    				{
+    					require_once "{$path}/{$service['file']}";
+    					Zend_Registry::get('server')->setClass($service['class'], $namespace);
+    				}
+				}
+			}
+			
+			// Skip on to the next if there's no ext_ modules
+			$extPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}";
+			if(!is_dir($extPath)){
+			    continue;
+			}
+			
             // Add the view path if it's provided by the add-on
 		    $scriptPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/views";
 			if (is_dir($scriptPath)) {
@@ -137,28 +159,13 @@ class Cosmos_Addon
 			}
 			
             // Load the controller file if it's provided by the add-on
-			if (!isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
-    		    $path = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers/";
+		    $controllerPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers";
+			if (is_dir($controllerPath) && !isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
                 $file = $dispatcher->getControllerClass($request).'.php';
-    			if(Zend_Loader::isReadable($path.'/'.$file)){
-    				Zend_Loader::loadFile($file, $path, true);
+    			if(Zend_Loader::isReadable($controllerPath.'/'.$file)){
+    				Zend_Loader::loadFile($file, $controllerPath, true);
     				$controllerLoaded = true;
     			}
-			}
-			
-            // Add any services provided by the add-on
-			$iniFile = APPLICATION_PATH . "/addons/{$addon}/services/services.ini";
-			if (Zend_Loader::isReadable($iniFile)) {
-				$path = APPLICATION_PATH . "/addons/{$addon}/services";
-				$config = new Zend_Config_Ini($iniFile);
-				$config = $config->toArray();
-				if ($config['services'] !== null) {
-				    foreach($config['services'] as $namespace => $service)
-    				{
-    					require_once "{$path}/{$service['file']}";
-    					Zend_Registry::get('server')->setClass($service['class'], $namespace);
-    				}
-				}
 			}
         }
     }
