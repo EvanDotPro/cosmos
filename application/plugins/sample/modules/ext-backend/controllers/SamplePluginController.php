@@ -6,17 +6,16 @@ class Backend_SamplePluginController extends Zend_Controller_Action
 //		if (!Zend_Auth::getInstance()->hasIdentity()){
 //		    return $this->_helper->redirector('index','login','backend');
 //		}
-	    $this->_filename = APPLICATION_PATH . '/data/content.txt';
 	}
 	
     public function indexAction()
     {
-        $this->view->content = file_get_contents($this->_filename);
+        $this->view->content = Cosmos_Api::get()->content->read();
     }
     
     public function updateContentAction()
     {
-        file_put_contents($this->_filename, $_POST['content']);
+        Cosmos_Api::get()->content->write($_POST['content']);
         return $this->_helper->redirector('index','sample-plugin','backend');
     }
 }
