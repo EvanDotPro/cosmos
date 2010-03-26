@@ -19,6 +19,12 @@ class Cosmos_Addon
     protected static $_instance = null;
     
     /**
+     * If any addons override the layout, then this will be set
+     * @var string
+     */
+    protected $_layoutPath = null;
+    
+    /**
      * Constructor
      *
      * Instantiate using {@link getInstance()}; the cosmos addon manager is a singleton
@@ -68,19 +74,30 @@ class Cosmos_Addon
     {
         $moduleName = $request->getModuleName();
         $dispatcher = Zend_Controller_Front::getInstance()->getDispatcher();
-        
+
 	    // Add the core module's view path first so ZF doesn't try to later and mess things up
         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->initView();
-		$scriptPath = APPLICATION_PATH . "/core/modules/{$moduleName}/views/";
+        $moduleDirectory = Zend_Controller_Front::getInstance()->getModuleDirectory($moduleName);
+		$scriptPath = "{$moduleDirectory}/views/";
 		if (is_dir($scriptPath)) {
 			Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
 		}
+		$moduleLayoutDirectory = "{$moduleDirectory}/views/layouts";
+        if(is_dir($moduleLayoutDirectory)){
+            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($moduleLayoutDirectory);
+        }
         
         foreach($this->_addons as $addon){
             // Add the view path if it's provided by the add-on
 		    $scriptPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext-{$moduleName}/views/";
 			if (is_dir($scriptPath)) {
 				Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
+				// Set the layout path if given
+				$layoutPath = $scriptPath.'layouts/';
+				if (is_dir($layoutPath)) {
+				    $this->_layoutPath = $layoutPath;
+                    Zend_Layout::getMvcInstance()->getView()->addScriptPath($layoutPath);
+				}
 			}
 			
             // Load the controller file if it's provided by the add-on
@@ -119,5 +136,15 @@ class Cosmos_Addon
     public function listEnabledAddons()
     {
         return $this->_addons;
+    }
+    
+    /**
+     * Returns the layout path if any add-ons have overridden it
+     * 
+     * @return string
+     */
+    public function getLayoutPath()
+    {
+        return $this->_layoutPath;
     }
 }
