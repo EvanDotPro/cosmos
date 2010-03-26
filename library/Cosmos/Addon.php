@@ -138,9 +138,9 @@ class Cosmos_Addon
 			
             // Load the controller file if it's provided by the add-on
 			if (!isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
-    		    $path = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers";
-                $file = '/'.$dispatcher->getControllerClass($request).'.php';
-    			if(Zend_Loader::isReadable($path.$file)){
+    		    $path = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers/";
+                $file = $dispatcher->getControllerClass($request).'.php';
+    			if(Zend_Loader::isReadable($path.'/'.$file)){
     				Zend_Loader::loadFile($file, $path, true);
     				$controllerLoaded = true;
     			}
