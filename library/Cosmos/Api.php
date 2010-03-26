@@ -1,6 +1,11 @@
 <?php
 class Cosmos_Api
 {
+    public static function get()
+    {
+        return Zend_Registry::get('api');
+    }
+    
 	public static function getApiKey($apiKey)
     {
     	 $query = Zend_Registry::get('db')
