@@ -19,8 +19,11 @@
 </div>
 
 <div id="footer">
-Cosmos Commerce v <?=Cosmos_Version::VERSION; ?><br/>
-(SESSION: <?= Zend_Session::getId(); ?>)
+
+<?= $this->placeholder('footer') ?>
+
+<p>Cosmos Commerce v <?=Cosmos_Version::VERSION; ?><br/>
+(SESSION: <?= Zend_Session::getId(); ?>)</p>
 </div>
 
 </body>
