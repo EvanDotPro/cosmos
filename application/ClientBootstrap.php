@@ -11,7 +11,6 @@ class ClientBootstrap extends Cosmos_Bootstrap
         $options = $this->getOptions();
         Zend_Registry::set('options', new Zend_Config($options['cosmos']));
     }
-
     
     protected function _initClientSession()
     {
@@ -35,6 +34,18 @@ class ClientBootstrap extends Cosmos_Bootstrap
 		    Zend_Registry::get('log')->err($e);
 		}
     }
+    
+    /**
+     * Instantiates the Cosmos addon loader. 
+     * NOTE: This must be ran _AFTER_ the API client is set up.
+     * 
+     * @return void
+     */
+    protected function _initAddons()
+    {
+        Cosmos_Addon::getInstance();
+    }
+
     
     protected function _initZFDebug()
     {

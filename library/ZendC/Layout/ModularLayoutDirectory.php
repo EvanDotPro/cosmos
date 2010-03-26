@@ -5,7 +5,8 @@ class ZendC_Layout_ModularLayoutDirectory
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
         $moduleName = $request->getModuleName();
-        $path = APPLICATION_PATH . "/core/modules/{$moduleName}/views/layouts";
+        $directory = Zend_Controller_Front::getInstance()->getModuleDirectory($moduleName);
+        $path = "{$directory}/views/layouts";
         if(is_dir($path)){
 //            Zend_Layout::getMvcInstance()->getView()->addBasePath($scriptPath);
             $this->getLayout()->setLayoutPath($path);
