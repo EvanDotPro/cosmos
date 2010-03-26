@@ -54,15 +54,17 @@ class Cosmos_Addon
             } catch(Exception $e) {
                 continue;
             }
-
+            
+            $addon = strtolower($addon);
+            
             foreach ($dir as $file) {
                 if ($file->isDot() || !$file->isDir()) {
                     continue;
                 }
 
-                $module = $file->getFilename();
-
-                if (strlen($module) <= $addon || strtolower(substr($module,0,4)) == 'ext_' || (strtolower(substr($module,0,strlen($addon))).'_' != strtolower($addon).'_') || preg_match('/^[^a-z]/i', $module)) {
+                $module = strtolower($file->getFilename());
+                
+                if (strlen($module) <= strlen($addon) || substr($module,0,4) == 'ext_' || (substr($module,0,strlen($addon)).'_' != $addon.'_')) {
                     continue;
                 }
                 
