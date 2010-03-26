@@ -41,14 +41,14 @@ class Cosmos_Addon
         foreach($this->_addons as $addon){
             
             // Add the library folder to the include path if it exists
-            $libraryPath = APPLICATION_PATH . "/addons/{$addon}/library/";
+            $libraryPath = APPLICATION_PATH . "/addons/{$addon}/library";
 			if (is_dir($libraryPath)) {
 			    // @todo: possibly use the zend autoloader instead?
 				set_include_path(implode(PATH_SEPARATOR, array(get_include_path(), $libraryPath)));
 			}
 			
             // Add any modules the plugins provide
-            $path = APPLICATION_PATH . "/addons/{$addon}/modules/";
+            $path = APPLICATION_PATH . "/addons/{$addon}/modules";
             try{
                 $dir = new DirectoryIterator($path);
             } catch(Exception $e) {
@@ -109,7 +109,7 @@ class Cosmos_Addon
 	    // Add the core module's view path first so ZF doesn't try to later and mess things up
         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->initView();
         $moduleDirectory = Zend_Controller_Front::getInstance()->getModuleDirectory($moduleName);
-		$scriptPath = "{$moduleDirectory}/views/";
+		$scriptPath = "{$moduleDirectory}/views";
 		if (is_dir($scriptPath)) {
 			Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
 		}
@@ -120,15 +120,16 @@ class Cosmos_Addon
             $defualtModule = Zend_Controller_Front::getInstance()->getDefaultModule();
             $defaultModuleDirectory = Zend_Controller_Front::getInstance()->getModuleDirectory($defualtModule);
             Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($defaultModuleDirectory . '/views');
-            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($defaultModuleDirectory . '/views/layouts/');
+            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($defaultModuleDirectory . '/views/layouts');
         }
         foreach($this->_addons as $addon){
             // Add the view path if it's provided by the add-on
-		    $scriptPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/views/";
+		    $scriptPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/views";
 			if (is_dir($scriptPath)) {
 				Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
+				$this->_runPlaceholders($scriptPath.'/scripts');
 				// Set the layout path if given
-				$layoutPath = $scriptPath.'layouts/';
+				$layoutPath = $scriptPath.'/layouts';
 				if (is_dir($layoutPath)) {
 				    $this->_layoutPath = $layoutPath;
 				    Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($layoutPath);
@@ -137,8 +138,8 @@ class Cosmos_Addon
 			
             // Load the controller file if it's provided by the add-on
 			if (!isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
-    		    $path = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers/";
-                $file = $dispatcher->getControllerClass($request).'.php';
+    		    $path = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers";
+                $file = '/'.$dispatcher->getControllerClass($request).'.php';
     			if(Zend_Loader::isReadable($path.$file)){
     				Zend_Loader::loadFile($file, $path, true);
     				$controllerLoaded = true;
@@ -159,6 +160,23 @@ class Cosmos_Addon
     				}
 				}
 			}
+        }
+    }
+    
+    protected function _runPlaceholders($path)
+    {
+        try{
+            $dir = new DirectoryIterator($path.'/_placeholders');
+        } catch(Exception $e) {
+            return false;
+        }
+
+        foreach ($dir as $file) {
+            if ($file->isDot() || $file->isDir()) {
+                continue;
+            }
+            $filename = '_placeholders/'.$file->getFilename();
+            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->render($filename);
         }
     }
     
