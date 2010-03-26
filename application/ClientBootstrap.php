@@ -47,15 +47,15 @@ class ClientBootstrap extends Cosmos_Bootstrap
     }
 
     
-    protected function _initZFDebug()
-    {
-        if ($this->hasOption('zfdebug'))
-        {
-            $autoloader = Zend_Loader_Autoloader::getInstance();
-            $autoloader->registerNamespace('ZFDebug');
-            $this->bootstrap('FrontController');
-            $zfdebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
-            $this->getResource('FrontController')->registerPlugin($zfdebug);
-        }
-    }
+//    protected function _initZFDebug()
+//    {
+//        if ($this->hasOption('zfdebug'))
+//        {
+//            $autoloader = Zend_Loader_Autoloader::getInstance();
+//            $autoloader->registerNamespace('ZFDebug');
+//            $this->bootstrap('FrontController');
+//            $zfdebug = new ZFDebug_Controller_Plugin_Debug($this->getOption('zfdebug'));
+//            $this->getResource('FrontController')->registerPlugin($zfdebug);
+//        }
+//    }
 }

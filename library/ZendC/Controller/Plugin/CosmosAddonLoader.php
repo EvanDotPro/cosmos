@@ -3,6 +3,8 @@ class ZendC_Controller_Plugin_CosmosAddonLoader extends Zend_Controller_Plugin_A
 {
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
 	{
-	    Cosmos_Addon::getInstance()->setRequest($request);
+	    if(!Cosmos_Addon::getInstance()->getRequest()){
+	        Cosmos_Addon::getInstance()->setRequest($request);
+	    }
 	}
 }

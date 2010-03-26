@@ -1,5 +1,5 @@
 <?php
-class SampleContent {
+class Sample_Services_Content {
     
     public function __construct()
     {

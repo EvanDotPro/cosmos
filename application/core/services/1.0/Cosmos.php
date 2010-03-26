@@ -22,19 +22,8 @@ class Cosmos
 			'sample',
 			'test_theme',
 			'test_service_provider',
-			'calculator'
+			'calculator',
+		    'debug'
 		);
-	}
-	
-	/**
-	 * Takes a URL an returns an array of information regarding what to do with the URL
-	 * if it's a custom URL, otherwise it returns false.
-	 * 
-	 * @param string $url
-	 * @return boolean|array
-	 */
-	public function checkUrl($url)
-	{
-	    
 	}
 }

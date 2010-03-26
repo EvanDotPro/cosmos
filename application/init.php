@@ -49,7 +49,7 @@ defined('APPLICATION_HOST')
 define('REQUEST_MICROTIME', microtime(true));
 
 // Set the include path
-set_include_path(implode(PATH_SEPARATOR, array(LIBRARY_PATH,'.')));
+set_include_path(implode(PATH_SEPARATOR, array('.',LIBRARY_PATH)));
 
 // Start up the profiler
 require_once 'Cosmos/Profiler.php';
