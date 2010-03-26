@@ -1,16 +1,17 @@
 <?php
 class ClientBootstrap extends Cosmos_Bootstrap
 {
+    protected function _initLog()
+    {
+        $this->initLog();
+    }
+    
     protected function _initCosmosOptions()
     {
         $options = $this->getOptions();
         Zend_Registry::set('options', new Zend_Config($options['cosmos']));
     }
-    
-    protected function _initLog()
-    {
-        $this->initLog();
-    }
+
     
     protected function _initClientSession()
     {

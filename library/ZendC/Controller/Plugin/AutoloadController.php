@@ -22,14 +22,18 @@ class ZendC_Controller_Plugin_AutoloadController extends Zend_Controller_Plugin_
         }
     }
     
-    public function postDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->initView();
+        $scriptPath = APPLICATION_PATH . "/core/modules/{$request->getModuleName()}/views/";
+        if(is_dir($scriptPath)){
+            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
+        }
         foreach($this->_plugins as $plugin){
             $scriptPath = APPLICATION_PATH . "/plugins/{$plugin}/modules/ext-{$request->getModuleName()}/views/";
             if(is_dir($scriptPath)){
-                Zend_Layout::getMvcInstance()->getView()->addBasePath($scriptPath);
+                Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
             }
-            $basePath = Zend_Layout::getMvcInstance()->getView()->getScriptPaths();Zend_Debug::dump($basePath);
         }
     }
 }
