@@ -15,11 +15,11 @@ class ClientBootstrap extends Cosmos_Bootstrap
     protected function _initClientSession()
     {
         $this->bootstrap('session');
-        if(!$namespace = Zend_Registry::get('options')->sharedsession->group){
-            $namespace = Zend_Registry::get('options')->store->id;
+        if(!$namespace = 'cosmos_'.Zend_Registry::get('options')->sharedsession->group){
+            $namespace = 'cosmos_'.Zend_Registry::get('options')->store->id;
         }
         Zend_Registry::set('csession', new Zend_Session_Namespace("cosmos_{$namespace}"));
-//        Cosmos_Sso::initiate($options['cosmos']['namespace']);
+        Cosmos_Sso::initiate($namespace);
     }
     
     protected function _initApiClient()
