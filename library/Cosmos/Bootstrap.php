@@ -9,8 +9,12 @@ class Cosmos_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         $this->bootstrap('multidb');
         
-        $masterDb = $resource->getDefaultDb(true);
+        $masterDb = $resource->getDefaultDb();
         Zend_Registry::set('dbw',$masterDb);
+        // @todo: function to randomly pick slave server...
+        // The function should be able to be overridden by an add-on
+        $slaveDb = $resource->getDefaultDb();
+        Zend_Registry::set('dbr',$slaveDb);
     }
     
     public function initLog()

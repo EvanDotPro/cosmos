@@ -63,6 +63,11 @@ class Cosmos_Api_Client_Local
      */
     public function cosmosRequest(Cosmos_Api_Request $request)
     {
+        $apiKey = Cosmos_Api::getApiKey($request->getOauthParam('oauth_consumer_key'));
+		if(!$apiKey){
+		    Zend_Debug::dump($apiKey);
+//			throw new Cosmos_Api_Exception('Unauthorized - Bad consumer key provided', 401);
+		}
         $this->_server->setRequest($request);
         $response = $this->_server->handle();
         return $response;

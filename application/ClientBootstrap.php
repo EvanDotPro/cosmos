@@ -12,6 +12,11 @@ class ClientBootstrap extends Cosmos_Bootstrap
         Zend_Registry::set('options', new Zend_Config($options['cosmos']));
     }
     
+    protected function _initDb()
+    {
+        $this->initDatabase();
+    }
+    
     protected function _initClientSession()
     {
         $this->bootstrap('session');

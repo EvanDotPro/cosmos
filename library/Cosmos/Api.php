@@ -8,11 +8,11 @@ class Cosmos_Api
     
 	public static function getApiKey($apiKey)
     {
-    	 $query = Zend_Registry::get('db')
+    	 $query = Zend_Registry::get('dbr')
             ->select()
             ->from('api_key')
-            ->where('api_key.api_key = ?', $apiKey);
-        $return = Zend_Registry::get('db')->fetchRow($query);
+            ->where('api_key.oauth_consumer_key = ?', $apiKey);
+        $return = Zend_Registry::get('dbr')->fetchRow($query);
         return $return;
     }
     
@@ -20,10 +20,10 @@ class Cosmos_Api
     {
         $data = array();
         $data['company_id'] = $companyID;
-        $data['api_key'] = $this->generateKey();
-        $data['private_key'] = $this->generateKey();
-        Zend_Registry::get('db')->insert('api_key', $data);
-        $return = Zend_Registry::get('db')->lastInsertId();
+        $data['oauth_consumer_key'] = $this->generateKey();
+        $data['oauth_consumer_secret'] = $this->generateKey();
+        Zend_Registry::get('dbw')->insert('api_key', $data);
+        $return = Zend_Registry::get('dbw')->lastInsertId();
         return $return;
     }
     

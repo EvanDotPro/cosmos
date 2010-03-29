@@ -277,6 +277,21 @@ class Cosmos_Api_Request
         $this->_oauthParams[$name] = $value;
         return $this;
     }
+    
+    /**
+     * Returns the value of a given OAuth parameter
+     * 
+     * @param string $name
+     * @return mixed
+     */
+    public function getOauthParam($name)
+    {
+        if(isset($this->_oauthParams[$name])){
+            return $this->_oauthParams[$name];
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Get OAuth 'Authentication' header string

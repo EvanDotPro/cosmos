@@ -114,6 +114,7 @@ class Cosmos_Addon
 		$scriptPath = "{$moduleDirectory}/views";
 		if (is_dir($scriptPath)) {
 			Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
+			$this->_runPlaceholders($scriptPath.'/scripts');
 		}
 		$moduleLayoutDirectory = "{$moduleDirectory}/views/layouts";
         if(is_dir($moduleLayoutDirectory)){
@@ -143,7 +144,7 @@ class Cosmos_Addon
 			
 			// Skip on to the next if there's no ext_ modules
 			$extPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}";
-			if(!is_dir($extPath)){
+			if (!is_dir($extPath)) {
 			    continue;
 			}
 			
@@ -164,7 +165,7 @@ class Cosmos_Addon
 		    $controllerPath = APPLICATION_PATH . "/addons/{$addon}/modules/ext_{$moduleName}/controllers";
 			if (is_dir($controllerPath) && !isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
                 $file = $dispatcher->getControllerClass($request).'.php';
-    			if(Zend_Loader::isReadable($controllerPath.'/'.$file)){
+    			if (Zend_Loader::isReadable($controllerPath.'/'.$file)) {
     				Zend_Loader::loadFile($file, $controllerPath, true);
     				$controllerLoaded = true;
     			}
@@ -174,18 +175,8 @@ class Cosmos_Addon
     
     protected function _runPlaceholders($path)
     {
-        try{
-            $dir = new DirectoryIterator($path.'/_placeholders');
-        } catch(Exception $e) {
-            return false;
-        }
-
-        foreach ($dir as $file) {
-            if ($file->isDot() || $file->isDir()) {
-                continue;
-            }
-            $filename = '_placeholders/'.$file->getFilename();
-            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->render($filename);
+        if (Zend_Loader::isReadable($path.'/placeholders.php')) {
+            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->render('placeholders.php');
         }
     }
     

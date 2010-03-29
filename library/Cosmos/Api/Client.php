@@ -141,10 +141,10 @@ class Cosmos_Api_Client
         try {
             $return = $this->_internalClient->cosmosRequest($this->_request);
         } catch(Exception $e){
-            // Zend_Debug::dump($e);die();
-            $return = array();
-            $return['request'] = $this->_internalClient->getHttpClient()->getLastRequest();
-            $return['response'] = $this->_internalClient->getHttpClient()->getLastResponse();
+            Zend_Debug::dump($e);die();
+//            $return = array();
+//            $return['request'] = $this->_internalClient->getHttpClient()->getLastRequest();
+//            $return['response'] = $this->_internalClient->getHttpClient()->getLastResponse();
         }
 //        $return = array();
 //        $return['request'] = $this->_internalClient->getHttpClient()->getLastRequest();
