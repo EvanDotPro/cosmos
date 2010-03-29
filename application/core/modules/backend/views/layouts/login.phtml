@@ -1,26 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Cosmos Commerce Ecommerce Operations Center &raquo; Login</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="robots" content="noindex, nofollow" />
-<link rel="icon" href="http://www.southwestmedical.com/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="http://www.southwestmedical.com/favicon.ico" type="image/ico" />
-<style type="text/css">
-body { font-family: tahoma,Arial,Helvetica,sans-serif; font-size: 11px; }
-fieldset { width: 250px; margin: 50px auto; }
-legend { font-size: 1.5em; font-weight: bold; }
-table { margin: 0px auto; }
-</style>
+    <title>Cosmos Commerce Ecommerce Operations Center &raquo; Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <style type="text/css">
+        body { font-family: tahoma,Arial,Helvetica,sans-serif; font-size: 11px; }
+        fieldset { width: 250px; margin: 50px auto; }
+        legend { font-size: 1.5em; font-weight: bold; }
+        table { margin: 0px auto; }
+    </style>
 </head>
 <body>
-<? if(Zend_Registry::get('options')->sharedsession->enabled): ?>
-<script type="text/javascript" src="http://cosmos/sso?csid=<?= Zend_Session::getId(); ?>"></script>
-<? endif; ?>
-
 <?= $this->layout()->content; ?>
-&copy; <?= date('Y'); ?> CosmosCommerce.com<br/>
-(SESSION: <?= Zend_Session::getId(); ?>)<br/>
+<div>
+    <p>&copy; <?= date('Y'); ?> CosmosCommerce.com</p>
+    <p>(SESSION: <?= Zend_Session::getId(); ?>)</p>
+</div>
 </body>
 </html>
     

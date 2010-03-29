@@ -69,7 +69,10 @@ class Cosmos_Addon
                 }
                 
                 $moduleDir = $file->getPathname() . DIRECTORY_SEPARATOR . Zend_Controller_Front::getInstance()->getModuleControllerDirectoryName();
-                Zend_Controller_Front::getInstance()->addControllerDirectory($moduleDir, $module);
+                if(is_dir($moduleDir)){
+                    Zend_Debug::dump($module);
+                    Zend_Controller_Front::getInstance()->addControllerDirectory($moduleDir, $module);
+                }
             }
         }
     }

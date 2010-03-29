@@ -66,19 +66,14 @@ try {
     );
     $application->bootstrap();
 } catch(Zend_Config_Exception $e){
-    if($e instanceof Zend_Config_Exception){
-        // This is a bit sloppy, but the front controller won't catch these otherwise
-        $exceptionMessage = strtolower($e->getMessage());
-        if(strpos($exceptionMessage, 'syntax error') !== false){
-            $message = 'Configuration Error - Invalid Syntax';
-        } elseif(strpos($exceptionMessage, 'no such file') !== false){
-            $message = 'Configuration Error - Invalid Host';
-        } else {
-            $message = 'Configuration Error - Unknown Error';
-        }
+    // This is a bit sloppy, but the front controller won't catch these otherwise
+    $exceptionMessage = strtolower($e->getMessage());
+    if(strpos($exceptionMessage, 'syntax error') !== false){
+        $message = 'Configuration Error - Invalid Syntax';
+    } elseif(strpos($exceptionMessage, 'no such file') !== false){
+        $message = 'Configuration Error - Invalid Host';
     } else {
-        var_dump($e);
-        $message = 'hello';
+        $message = 'Configuration Error - Unknown Error';
     }
     die($message);
 }
