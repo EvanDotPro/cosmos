@@ -1,5 +1,5 @@
 <?php
-class Samplemod_ErrorController extends Zend_Controller_Action {
+class Sample_Samplemod_ErrorController extends Zend_Controller_Action {
 
    public function errorAction()
    {
