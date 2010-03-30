@@ -7,4 +7,9 @@ class Sample_Samplemod_IndexController extends Zend_Controller_Action
         $this->view->result = Cosmos_Addon::getInstance()->listEnabledAddons();
         Cosmos_Profiler::stop('sampleIndex');
     }
+    
+    public function testAction()
+    {
+        
+    }
 }

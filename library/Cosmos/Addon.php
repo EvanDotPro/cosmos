@@ -27,6 +27,8 @@ class Cosmos_Addon
     
     protected $_request = null;
     
+    protected $_router = null;
+    
     /**
      * Constructor
      *
@@ -37,43 +39,53 @@ class Cosmos_Addon
      */
     protected function __construct()
     {
+        
         $this->_addons = Cosmos_Api::get()->cosmos->listEnabledAddons();
-        foreach($this->_addons as $addon){
+        
+        $addonsDir = APPLICATION_PATH . '/addons';
+        
+        foreach($this->_addons as $addonName){
+            
+            $thisAddonDir = $addonsDir . '/' . $addonName;
             
             // Add the library folder to the include path if it exists
-            $libraryPath = APPLICATION_PATH . "/addons/{$addon}/library";
+            $libraryPath = $thisAddonDir . "/library";
 			if (is_dir($libraryPath)) {
 			    // @todo: possibly use the zend autoloader instead?
 				set_include_path(implode(PATH_SEPARATOR, array(get_include_path(), $libraryPath)));
 			}
 			
-            // Add any modules the plugins provide
-            $path = APPLICATION_PATH . "/addons/{$addon}/modules";
+			// Add any routes the add-on provides
+			$this->_addRoutes($thisAddonDir . '/etc/routes');
+			
+            // Add any modules the add-on provide
             try{
-                $dir = new DirectoryIterator($path);
+                $dir = new DirectoryIterator($thisAddonDir . '/modules');
             } catch(Exception $e) {
                 continue;
             }
             
-            $addon = strtolower($addon);
+            $addon = strtolower($addonName);
             
             foreach ($dir as $file) {
                 if ($file->isDot() || !$file->isDir()) {
                     continue;
                 }
 
-                $module = strtolower($file->getFilename());
+                $moduleName = strtolower($file->getFilename());
                 
-                if (strlen($module) <= strlen($addon) || substr($module,0,4) == 'ext_' || (substr($module,0,strlen($addon)).'_' != $addon.'_')) {
+                if (strlen($moduleName) <= strlen($addon) || substr($moduleName,0,4) == 'ext_' || (substr($moduleName,0,strlen($addon)).'_' != $addon.'_')) {
                     continue;
                 }
                 
                 $moduleDir = $file->getPathname() . DIRECTORY_SEPARATOR . Zend_Controller_Front::getInstance()->getModuleControllerDirectoryName();
                 if(is_dir($moduleDir)){
-                    Zend_Debug::dump($module);
-                    Zend_Controller_Front::getInstance()->addControllerDirectory($moduleDir, $module);
+                    Zend_Controller_Front::getInstance()->addControllerDirectory($moduleDir, $file->getFilename());
                 }
             }
+            
+            // Add any routes the addon provides
+            
         }
     }
     
@@ -180,6 +192,26 @@ class Cosmos_Addon
     {
         if (Zend_Loader::isReadable($path.'/placeholders.php')) {
             Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->render('placeholders.php');
+        }
+    }
+    
+    protected function _addRoutes($path)
+    {
+        try{
+            $dir = new DirectoryIterator($path);
+        } catch(Exception $e) {
+            return;
+        }
+        if($this->_router == null){
+            $this->_router = Zend_Controller_Front::getInstance()->getRouter();
+        }
+        
+        foreach ($dir as $file) {
+            if ($file->isDot()) {
+                continue;
+            }
+            $config = new Zend_Config_Ini($file->getPathname(), 'routes');
+            $this->_router->addConfig($config, 'routes');
         }
     }
     
