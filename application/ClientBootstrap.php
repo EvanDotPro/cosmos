@@ -1,6 +1,13 @@
 <?php
 class ClientBootstrap extends Cosmos_Bootstrap
 {
+    protected function _initCoreTranslations()
+    {
+        // this should load from a csv or something else.
+        $adapter = new Zend_Translate('array', array('Current Status' => 'Test'), 'en');
+        Zend_Registry::set('Zend_Translate', $adapter);
+    }
+    
     protected function _initLog()
     {
         $this->initLog();

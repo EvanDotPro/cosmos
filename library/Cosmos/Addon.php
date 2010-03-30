@@ -215,6 +215,11 @@ class Cosmos_Addon
         }
     }
     
+    protected function _addLanguages($path)
+    {
+        Zend_Registry::get('Zend_Translate')->addTranslation($path,null,array('scan' => Zend_Translate::LOCALE_DIRECTORY));
+    }
+    
     public function getRequest()
     {
         return $this->_request;

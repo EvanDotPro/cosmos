@@ -1,11 +1,11 @@
 <? $this->placeholder('footer')->captureStart(); ?>
 <? if(date("N") <= 5 && date("G") >= 8 && date("G") < 17): ?>
 <span class="status">
-	Current Status: <span class="green">Available</span>
+	<?=$this->translate('Current Status');?>: <span class="green"><?=$this->translate('Available');?></span>
 </span>
 <? else: ?>
 <span class="status">
-	Current Status: <span class="red">Unavailable</span>
+	<?=$this->translate('Current Status');?>: <span class="red"><?=$this->translate('Unavailable');?></span>
 </span>
 <? endif; ?>
 <? $this->placeholder('footer')->captureEnd() ?>
