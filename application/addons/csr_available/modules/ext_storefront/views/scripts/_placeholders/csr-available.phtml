@@ -1,11 +1,10 @@
 <? $this->placeholder('footer')->captureStart(); ?>
-<? if(date("N") <= 5 && date("G") >= 8 && date("G") < 17): ?>
 <span class="status">
-	<?=$this->translate('Current Status');?>: <span class="green"><?=$this->translate('Available');?></span>
+	<?=$this->translate('CSR_CURRENT_STATUS');?>: 
+    <? if(date("N") <= 5 && date("G") >= 8 && date("G") < 17): ?>
+    	<span class="green"><?=$this->translate('CSR_AVAILABLE');?></span>
+    <? else: ?>
+    	<span class="red"><?=$this->translate('CSR_UNAVAILABLE');?></span>
+    <? endif; ?>
 </span>
-<? else: ?>
-<span class="status">
-	<?=$this->translate('Current Status');?>: <span class="red"><?=$this->translate('Unavailable');?></span>
-</span>
-<? endif; ?>
 <? $this->placeholder('footer')->captureEnd() ?>

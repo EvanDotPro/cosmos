@@ -1,1 +1,7 @@
-"Save Content";"Save Content!"
+"SAMPLE_CONTENT";"Content"
+"SAMPLE_LINE_ONE";"This is the index action of the sample module provided by the sample addon."
+"SAMPLE_LINE_TWO";"Here's the addon's that are loaded"
+"SAMPLE_SAVE_CONTENT_BUTTON";"Save Content"
+"SAMPLE_TEST_ACTION";"This is just a test action."
+"SAMPLE_MODULE_NAME";"Sample Module"
+"SAMPLE_PROVIDED_BY";"Provided by an add-on"

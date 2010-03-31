@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head>
-	<title>Backend Module / Store Management</title>
+	<title><?=$this->translate('BACKEND_MODULE_TITLE');?></title>
 </head>
 <body>
 
 <div id="header">
-	<h3>Backend Module Layout</h3>
+	<h3><?=$this->translate('BACKEND_LAYOUT_HEADER');?></h3>
 </div>
 
 <div class="clearfix">
@@ -16,7 +16,8 @@
 </div>
 
 <div id="footer">
-&copy; <?= date('Y'); ?> CosmosCommerce.com
+<p>Cosmos Commerce v <?=Cosmos_Version::VERSION; ?></p>
+<p>(SESSION: <?= Zend_Session::getId(); ?>)</p>
 </div>
 
 </body>

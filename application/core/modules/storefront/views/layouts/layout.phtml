@@ -9,7 +9,7 @@
 <? endif; ?>
 
 <div id="header">
-	<h3>Storefront Module</h3>
+	<h3><?=$this->translate('STOREFRONT_HEADER');?></h3>
 </div>
 
 <div class="clearfix">
@@ -19,11 +19,9 @@
 </div>
 
 <div id="footer">
-
 <?= $this->placeholder('footer') ?>
-
-<p>Cosmos Commerce v <?=Cosmos_Version::VERSION; ?><br/>
-(SESSION: <?= Zend_Session::getId(); ?>)</p>
+<p>Cosmos Commerce v <?=Cosmos_Version::VERSION; ?></p>
+<p>(SESSION: <?= Zend_Session::getId(); ?>)</p>
 </div>
 
 </body>
