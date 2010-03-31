@@ -5,7 +5,7 @@
  * LICENSE
  *
  * This source file is dual licensed under the MIT or GPL Version 2
- * licenses that are bundled with this package in the files 
+ * licenses that are bundled with this package in the files
  * GPL-LICENSE.txt and MIT-LICENSE.txt.
  * A copy is also available through the world-wide-web at this URL:
  * http://cosmoscommerce.org/license
@@ -26,7 +26,7 @@ defined('APPLICATION_PATH')
 
 // Define path to library directory
 defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', 
+	|| define('LIBRARY_PATH',
 	        realpath(dirname(__FILE__) . '/../library'));
 
 // Define application environment
@@ -34,7 +34,7 @@ defined('APPLICATION_ENV')
 	|| define('APPLICATION_ENV',
 			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
 											: 'production'));
-											
+
 // Define application environment
 defined('APPLICATION_MODE')
 	|| define('APPLICATION_MODE',
@@ -55,7 +55,7 @@ set_include_path(implode(PATH_SEPARATOR, array('.',LIBRARY_PATH)));
 require_once 'Cosmos/Profiler.php';
 Cosmos_Profiler::enable();
 Cosmos_Profiler::start('app');
-    
+
 // Bootsrap
 Cosmos_Profiler::start('bootstrap');
 try {

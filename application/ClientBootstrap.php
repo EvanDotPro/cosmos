@@ -27,7 +27,7 @@ class ClientBootstrap extends Cosmos_Bootstrap
     protected function _initClientSession()
     {
         $this->bootstrap('session');
-        if(!$namespace = 'cosmos_'.Zend_Registry::get('options')->sharedsession->group){
+        if (!$namespace = 'cosmos_'.Zend_Registry::get('options')->sharedsession->group) {
             $namespace = 'cosmos_'.Zend_Registry::get('options')->store->id;
         }
         Zend_Registry::set('csession', new Zend_Session_Namespace("cosmos_{$namespace}"));
