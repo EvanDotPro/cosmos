@@ -14,8 +14,8 @@
 <body>
 <?= $this->layout()->content; ?>
 <div>
-    <p>&copy; <?= date('Y'); ?> Cosmos Commerce</p>
-    <p>(SESSION: <?= Zend_Session::getId(); ?>)</p>
+<p>Cosmos Commerce v <?=Cosmos_Version::VERSION; ?></p>
+<p>(SESSION: <?= Zend_Session::getId(); ?>)</p>
 </div>
 </body>
 </html>
