@@ -23,7 +23,8 @@ class Cosmos
 			'test_theme',
 			'test_service_provider',
 			'calculator',
-		    'debug'
+		    'debug',
+		    'custom_urls'
 		);
 	}
 	
