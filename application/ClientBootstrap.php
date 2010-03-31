@@ -3,7 +3,7 @@ class ClientBootstrap extends Cosmos_Bootstrap
 {
     protected function _initCoreTranslations()
     {
-        // this should load from a csv or something else.
+        // @todo: auto-detect and/or make the locale dynamic
         $adapter = new Zend_Translate('csv', APPLICATION_PATH . '/core/etc/languages', 'en_US');
         Zend_Registry::set('Zend_Translate', $adapter);
     }

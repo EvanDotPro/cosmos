@@ -58,6 +58,9 @@ class Cosmos_Addon
 			// Add any routes the add-on provides
 			$this->_addRoutes($thisAddonDir . '/etc/routes');
 			
+			// Add any translations
+			$this->_addLanguages($thisAddonDir . '/etc/languages');
+			
             // Add any modules the add-on provide
             try{
                 $dir = new DirectoryIterator($thisAddonDir . '/modules');
@@ -217,7 +220,10 @@ class Cosmos_Addon
     
     protected function _addLanguages($path)
     {
-        Zend_Registry::get('Zend_Translate')->addTranslation($path,null,array('scan' => Zend_Translate::LOCALE_DIRECTORY));
+        if(is_dir($path)){
+            // @todo: auto-detect and/or make the locale dynamic
+            Zend_Registry::get('Zend_Translate')->addTranslation($path,'en_US',array('scan' => Zend_Translate::LOCALE_DIRECTORY));
+        }
     }
     
     public function getRequest()
