@@ -1,5 +1,5 @@
 <?php
-class Backend_SamplePluginController extends Zend_Controller_Action
+class Backend_SampleContentController extends Zend_Controller_Action
 {
 	public function init()
 	{
