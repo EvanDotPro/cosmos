@@ -130,39 +130,44 @@ class Cosmos_Addon
         }
 
 
-        foreach($this->_addons as $addonName => $addon){
+        foreach ($this->_addons as $addonName => $addon) {
             $addonDir = $addon['directory'];
-//			if(isset($addon['config']['modules']['extended']) && is_array($addon['config']['modules']['extended'])){
-//
-//			}
-			// Skip on to the next if there's no ext_ modules
-			$extPath = APPLICATION_PATH . "/addons/{$addonName}/modules/ext_{$moduleName}";
-			if (!is_dir($extPath)) {
-			    continue;
-			}
 
-            // Add the view path if it's provided by the add-on
-		    $scriptPath = APPLICATION_PATH . "/addons/{$addonName}/modules/ext_{$moduleName}/views";
-			if (is_dir($scriptPath)) {
-				Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($scriptPath);
-				$this->_runPlaceholders($scriptPath.'/scripts');
-				// Set the layout path if given
-				$layoutPath = $scriptPath.'/layouts';
-				if (is_dir($layoutPath)) {
-				    $this->_layoutPath = $layoutPath;
-				    Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($layoutPath);
-				}
-			}
+            // Add extended module stuff...
+            if (isset($addon['config']['modules']['extended']['ext_' . $moduleName])) {
+                $extended = $addon['config']['modules']['extended']['ext_' . $moduleName];
+                $extendedDir = $addonDir . "/modules/ext_{$moduleName}";
+                // View stuff
+                if (isset($extended['views']) && $extended['views']) {
+                    // Add the view path
+                    $viewPath = $extendedDir . '/views';
+                    Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addBasePath($viewPath);
 
-            // Load the controller file if it's provided by the add-on
-		    $controllerPath = APPLICATION_PATH . "/addons/{$addonName}/modules/ext_{$moduleName}/controllers";
-			if (is_dir($controllerPath) && !isset($controllerLoaded) && !$dispatcher->isDispatchable($request)) {
-                $file = $dispatcher->getControllerClass($request).'.php';
-    			if (Zend_Loader::isReadable($controllerPath.'/'.$file)) {
-    				Zend_Loader::loadFile($file, $controllerPath, true);
-    				$controllerLoaded = true;
-    			}
-			}
+                    // Add the layouts path
+                    if (isset($extended['views']['layouts']) && $extended['views']['layouts'] == true) {
+                        $layoutPath = $viewPath.'/layouts';
+                        Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($layoutPath);
+                    }
+
+                    // Run the placeholders
+                    if (isset($extended['views']['placeholders']) && $extended['views']['placeholders'] == true) {
+                        $this->_runPlaceholders($viewPath.'/scripts');
+                    }
+                }
+
+                // Extended controllers
+                if (!isset($controllerLoaded)
+                    && isset($extended['controllers'])
+                    && $extended['controllers'] == true
+                    && !$dispatcher->isDispatchable($request)) {
+                    $controllerPath = $extendedDir . '/controllers';
+                    $file = $dispatcher->getControllerClass($request).'.php';
+                    if (Zend_Loader::isReadable($controllerPath.'/'.$file)) {
+                        Zend_Loader::loadFile($file, $controllerPath, true);
+                        $controllerLoaded = true;
+                    }
+                }
+            }
         }
     }
 
@@ -212,7 +217,6 @@ class Cosmos_Addon
         return $this->_request;
     }
 
-
     /**
      * Returns an array of the enabled add-ons, without having to make another API call.
      *
@@ -220,7 +224,11 @@ class Cosmos_Addon
      */
     public function listEnabledAddons()
     {
-        return $this->_addons;
+        $addons = array();
+        foreach($this->_addons as $addon => $details){
+            $addons[] = $addon;
+        }
+        return $addons;
     }
 
     /**
