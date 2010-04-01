@@ -1,11 +1,11 @@
 <?php
-class Sample_Services_Content {
-    
+class Sample_Services_Content
+{
     public function __construct()
     {
         $this->_filename = APPLICATION_PATH . '/data/content.txt';
     }
-    
+
 	/**
 	 * Return the value of the content file
 	 *
@@ -15,10 +15,10 @@ class Sample_Services_Content {
 	{
 		return file_get_contents($this->_filename);
 	}
-	
+
 	/**
 	 * Writes a string to the content file
-	 * 
+	 *
 	 * @param $content string
 	 * @return boolean
 	 */
