@@ -1,4 +1,4 @@
-<form method="post" action="<?= $this->url(array('controller' => 'sample-plugin', 'action' => 'update-content', 'module' => 'backend')); ?>">
+<form method="post" action="<?= $this->url(array('controller' => 'sample-content', 'action' => 'update-content', 'module' => 'backend')); ?>">
 <textarea name="content"><?=$this->content;?></textarea>
 <br/><input type="submit" value="<?=$this->translate('SAMPLE_SAVE_CONTENT_BUTTON');?>"/>
 </form>

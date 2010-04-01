@@ -2,19 +2,18 @@
 return array(
     'languages' => true,
     'modules' => array(
-        'ext_backend' => array(
-            'views' => true
-        ),
-        'ext_frontend' => array(
-            'views' => array(
-                'placeholders'  => true,
-                'layouts'       => false
+        'extended' => array(
+            'ext_backend' => array(
+                'views'         => true,
+                'controllers'   => true
+            ),
+            'ext_storefront' => array(
+                'views'         => true,
+                'controllers'   => true
             )
         ),
         'provided' => array(
-            'sample_samplemod' => array(
-
-            )
+            'sample_samplemod' => true
         )
     ),
     'routes' => array(

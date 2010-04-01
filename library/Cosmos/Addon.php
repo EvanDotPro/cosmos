@@ -133,6 +133,7 @@ class Cosmos_Addon
         foreach ($this->_addons as $addonName => $addon) {
             $addonDir = $addon['directory'];
 
+
             // Add extended module stuff...
             if (isset($addon['config']['modules']['extended']['ext_' . $moduleName])) {
                 $extended = $addon['config']['modules']['extended']['ext_' . $moduleName];

@@ -7,15 +7,15 @@ class Backend_SampleContentController extends Zend_Controller_Action
 //		    return $this->_helper->redirector('index','login','backend');
 //		}
 	}
-	
+
     public function indexAction()
     {
         $this->view->content = Cosmos_Api::get()->content->read();
     }
-    
+
     public function updateContentAction()
     {
         Cosmos_Api::get()->content->write($_POST['content']);
-        return $this->_helper->redirector('index','sample-plugin','backend');
+        return $this->_helper->redirector('index','sample-content','backend');
     }
 }
