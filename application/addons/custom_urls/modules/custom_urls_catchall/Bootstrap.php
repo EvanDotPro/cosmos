@@ -1,16 +1,14 @@
 <?php
 class Custom_urls_catchall_Bootstrap extends Cosmos_Bootstrap_Module
 {
-    protected $_file = __FILE__;
-    
     protected function _initCustomUrls()
     {
-        $this->bootstrap('FrontController');
-        
+        $this->bootstrap('frontController');
+
         Zend_Loader_Autoloader::getInstance()
             ->registerNamespace('Customurl')->registerNamespace('Customurl');
 
         $plugin = new Customurl_ControllerPlugin();
-        $this->getResource('FrontController')->registerPlugin($plugin);
+        $this->getResource('frontController')->registerPlugin($plugin);
     }
 }

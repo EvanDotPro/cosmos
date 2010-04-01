@@ -8,7 +8,7 @@ class ClientBootstrap extends Cosmos_Bootstrap
         Zend_Registry::set('Zend_Translate', $adapter);
     }
 
-    protected function _initLog()
+    protected function _initLogger()
     {
         $this->initLog();
     }
@@ -19,7 +19,7 @@ class ClientBootstrap extends Cosmos_Bootstrap
         Zend_Registry::set('options', new Zend_Config($options['cosmos']));
     }
 
-    protected function _initDb()
+    protected function _initDatabaseConnection()
     {
         $this->initDatabase();
     }

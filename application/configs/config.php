@@ -1,56 +1,22 @@
 <?php
-return array_merge_recursive(array(
-    'phpSettings' => array(
-        'date' => array(
-            'timezone' => 'America/Phoenix'
-        )
-    ),
-    'autoloadernamespaces' => array(
-        'Cosmos_',
-        'ZendC_'
-    ),
-    'resources' => array(
-        'multidb' => array(
-            'master' => array(
-                'adapter'   => 'pdo_mysql',
-                'host'      => 'localdev',
-                'username'  => 'cosmos',
-                'password'  => 'cosmos',
-                'dbname'    => 'cosmos',
-                'default'   => true
-            ),
-            'slave1' => array(
-                'adapter'   => 'pdo_mysql',
-                'host'      => 'localdev',
-                'username'  => 'cosmos',
-                'password'  => 'cosmos',
-                'dbname'    => 'cosmos'
-            )
-        )
-    )
-), include dirname(__FILE__) . '/' . APPLICATION_ENV . '.config.php');
+$config = array();
+$file = dirname(__FILE__) . '/all.base.config.php';
+include $file;
 
-?>
-[production]
-phpsettings.display_startup_errors = 0
-phpsettings.display_errors = 0
-phpsettings.date.timezone = "America/Phoenix"
+$file = dirname(__FILE__) . '/all.' . APPLICATION_ENV . '.config.php';
+include $file;
 
-autoloadernamespaces[] = "Cosmos_"
-autoloadernamespaces[] = "ZendC_"
+$file = dirname(__FILE__) . '/' . APPLICATION_MODE . '.base.config.php';
+include $file;
 
-resources.session.name = "cosmos"
 
-config[] = APPLICATION_PATH "/configs/" APPLICATION_MODE ".ini";
-config[] = APPLICATION_PATH "/configs/sites/" APPLICATION_HOST ".ini";
+$file = dirname(__FILE__) . '/' . APPLICATION_MODE . '.' . APPLICATION_ENV . '.config.php';
+include $file;
 
-[staging : production]
+$file = dirname(__FILE__) . '/sites/' . APPLICATION_HOST . '.base.config.php';
+include $file;
 
-[testing : production]
-phpSettings.display_startup_errors = 1
-phpSettings.display_errors = 1
+$file = dirname(__FILE__) . '/sites/' . APPLICATION_HOST . '.' . APPLICATION_ENV . '.config.php';
+include $file;
 
-[development : production]
-phpsettings.display_startup_errors = 1
-phpsettings.display_errors = 1
-phpsettings.error_reporting = E_ALL | E_STRICT
+return $config;

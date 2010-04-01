@@ -62,7 +62,7 @@ try {
     require_once 'ZendC/Application.php';
     $application = new ZendC_Application(
     	APPLICATION_ENV,
-    	APPLICATION_PATH . '/configs/all.ini'
+    	APPLICATION_PATH . '/configs/config.php'
     );
     $application->bootstrap();
 } catch(Zend_Config_Exception $e){
