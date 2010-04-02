@@ -27,4 +27,32 @@ class Cosmos
 		);
 	}
 
+	/**
+	 * Returns a store to use based on the host and path in the request.
+	 *
+	 * @param string $host
+	 * @param string $path
+	 */
+	public function getStoreByHostPath($host, $path)
+	{
+	    if($host == 'cosmos' && $path == 'store1')
+	    {
+	        return array(
+	           'store_id' => 1,
+	           'host'  => 'cosmos',
+	           'path' => 'store1',
+	           'group' => 1
+	        );
+	    }
+	   if($host == 'cosmos' && $path == '')
+        {
+            return array(
+                'store_id' => 2,
+                'host'  => 'cosmos',
+                'path' => '',
+                'group' => 2
+            );
+        }
+	}
+
 }
