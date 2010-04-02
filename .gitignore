@@ -1,6 +1,3 @@
-application/data/cache
-application/data/logs
-application/data/sessions
 .buildpath
 .project
 .settings
