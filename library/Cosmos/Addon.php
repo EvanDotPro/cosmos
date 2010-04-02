@@ -27,8 +27,6 @@ class Cosmos_Addon
 
     protected $_request = null;
 
-    protected $_router = null;
-
     /**
      * Constructor
      *
@@ -75,6 +73,7 @@ class Cosmos_Addon
                 }
             }
         }
+        Zend_Controller_Front::getInstance()->getRouter()->addRoute('master', Zend_Registry::get('masterRoute'));
     }
 
     /**
@@ -191,12 +190,10 @@ class Cosmos_Addon
 
     protected function _addRoutes($routesConfig)
     {
-//        if($this->_router == null){
-//            $this->_router = Zend_Controller_Front::getInstance()->getRouter();
-//        }
-//        $this->_router->addConfig($routesConfig);
-        $route = Zend_Controller_Router_Route::getInstance($routesConfig);
-        Zend_Registry::get('masterRoute')->chain($route);
+        foreach($routesConfig as $config){
+            $route = Zend_Controller_Router_Route::getInstance($config);
+            Zend_Registry::get('masterRoute')->chain($route);
+        }
     }
 
     protected function _addServices($path)
