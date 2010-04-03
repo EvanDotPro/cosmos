@@ -62,7 +62,7 @@ class Cosmos_Addon
 
             // Add any routes the add-on provides
             if (isset($config['routes']) && is_array($config['routes'])) {
-                $this->_addRoutes(new Zend_Config($config['routes']));
+                $this->_addRoutes($config['routes']);
             }
 
             // Add any modules the add-on provide
@@ -73,7 +73,6 @@ class Cosmos_Addon
                 }
             }
         }
-        Zend_Controller_Front::getInstance()->getRouter()->addRoute('master', Zend_Registry::get('masterRoute'));
     }
 
     /**
@@ -190,9 +189,15 @@ class Cosmos_Addon
 
     protected function _addRoutes($routesConfig)
     {
-        foreach($routesConfig as $config){
-            $route = Zend_Controller_Router_Route::getInstance($config);
-            Zend_Registry::get('masterRoute')->chain($route);
+        $router = Zend_Controller_Front::getInstance()->getRouter();
+        $chainNameSeparator = $router->getChainNameSeparator();
+        $cosmos = $router->getRoute('cosmos');
+        $router->addConfig(new Zend_Config($routesConfig));
+        foreach($routesConfig as $routeName => $config){
+            $route = $router->getRoute($routeName);
+            $chain = $cosmos->chain($route);
+            $chainName = 'cosmos'.$chainNameSeparator.$routeName;
+            $router->addRoute($chainName, $chain);
         }
     }
 

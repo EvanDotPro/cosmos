@@ -19,7 +19,7 @@ return array(
     'routes' => array(
         'test_route' => array(
             'type'      => 'Zend_Controller_Router_Route',
-            'route'     => 's/:controller/:action/*',
+            'route'     => 's/:controller/:action',
             'defaults'  => array(
                 'module'        => 'sample_samplemod',
                 'controller'    => 'index',

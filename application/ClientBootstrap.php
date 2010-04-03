@@ -47,30 +47,40 @@ class ClientBootstrap extends Cosmos_Bootstrap
 
     protected function _initStoreRoutes()
     {
+        $this->bootstrap('frontcontroller');
         $request = new Zend_Controller_Request_Http();
-
-        $chainedRoute = new Zend_Controller_Router_Route_Chain();
-        $path = explode('/',substr($request->getPathInfo(),1));
+        $path = explode('/',trim($request->getPathInfo(),'/'));
         $requestedPath = array_shift($path);
         $requestedHost = $request->getHttpHost();
-
-        $hostnameRoute = new Zend_Controller_Router_Route_Hostname($requestedHost,
-                                array('controller'=>'index', 'action'=>'index'));
-
-        $chainedRoute->chain($hostnameRoute);
-
+        $routeConfig = array();
+//        $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Module';
+        $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Hostname';
+        $routeConfig['defaultmodule']['route'] = $requestedHost;
         if($store = Cosmos_Api::get()->cosmos->getStoreByHostPath($requestedHost, $requestedPath)){
             if($store['path']){
-                $pathRoute = new Zend_Controller_Router_Route($store['path'],array('controller'=>'index', 'action'=>'index'));
+                $routeConfig['defaultroute']['type'] = 'Zend_Controller_Router_Route_Module';
+                $routeConfig['pathroute']['type'] = 'Zend_Controller_Router_Route';
+                $routeConfig['pathroute']['route'] = $store['path'];
+                $routeConfig['pathroute']['defaults']['controller'] = 'index';
+                $routeConfig['pathroute']['defaults']['action'] = 'index';
             } else {
-                $pathRoute = new Zend_Controller_Router_Route_Static('');
+//                $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Module';
+
+                $routeConfig['hostroute']['type'] = 'Zend_Controller_Router_Route_Hostname';
+                $routeConfig['hostroute']['route'] = $requestedHost;
             }
-            $chainedRoute->chain($pathRoute);
         } else {
+            die('fail');
             // no matching store?
         }
-        // Cleaner way to do this than Zend_Registry?
-        Zend_Registry::set('masterRoute', $chainedRoute);
+
+        $routeConfig['cosmos']['type'] = 'Zend_Controller_Router_Route_Chain';
+        if(isset($routeConfig['pathroute'])){
+            $routeConfig['cosmos']['chain'] = 'defaultmodule,pathroute';
+        } else {
+            $routeConfig['cosmos']['chain'] = ' defaultmodule';
+        }
+        Zend_Controller_Front::getInstance()->getRouter()->addConfig(new Zend_Config($routeConfig));
     }
 
     /**
@@ -82,5 +92,12 @@ class ClientBootstrap extends Cosmos_Bootstrap
     protected function _initAddons()
     {
         Cosmos_Addon::getInstance();
+    }
+
+    protected function _initDumpRoutes()
+    {
+        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos-test_route');
+        Zend_Debug::dump($test);
+        $test = Zend_Controller_Front::getInstance()->getRouter()->getRoutes();
     }
 }

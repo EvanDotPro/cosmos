@@ -35,17 +35,14 @@ class Cosmos
 	 */
 	public function getStoreByHostPath($host, $path)
 	{
-	    if($host == 'cosmos' && $path == 'store1')
-	    {
+	    if ($host == 'cosmos' && $path == 'store1') {
 	        return array(
 	           'store_id' => 1,
 	           'host'  => 'cosmos',
 	           'path' => 'store1',
 	           'group' => 1
 	        );
-	    }
-	   if($host == 'cosmos' && $path == '')
-        {
+	    } elseif ($host == 'cosmos') {
             return array(
                 'store_id' => 2,
                 'host'  => 'cosmos',
