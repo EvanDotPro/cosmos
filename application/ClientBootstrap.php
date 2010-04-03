@@ -52,12 +52,28 @@ class ClientBootstrap extends Cosmos_Bootstrap
         $path = explode('/',trim($request->getPathInfo(),'/'));
         $requestedPath = array_shift($path);
         $requestedHost = $request->getHttpHost();
+
+
+        $front = Zend_Controller_Front::getInstance();
+        $dispatcher = $front->getDispatcher();
+
+        $defaultRoute = new Zend_Controller_Router_Route_Module();
+
+        $defaults = array('controller'  => $dispatcher->getDefaultControllerName(),
+                          'action'      => $dispatcher->getDefaultAction(),
+                          'module'      => $dispatcher->getDefaultModule()
+                    );
+
+        $hostnameRoute = new Zend_Controller_Router_Route_Hostname($requestedHost);
+
         $routeConfig = array();
 //        $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Module';
         $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Hostname';
         $routeConfig['defaultmodule']['route'] = $requestedHost;
         if($store = Cosmos_Api::get()->cosmos->getStoreByHostPath($requestedHost, $requestedPath)){
             if($store['path']){
+                $pathRoute = new Zend_Controller_Router_Route($store['path'],$defaults);
+                $cosmos = $defaultRoute->chain($pathRoute,'');
                 $routeConfig['defaultroute']['type'] = 'Zend_Controller_Router_Route_Module';
                 $routeConfig['pathroute']['type'] = 'Zend_Controller_Router_Route';
                 $routeConfig['pathroute']['route'] = $store['path'];
@@ -80,7 +96,10 @@ class ClientBootstrap extends Cosmos_Bootstrap
         } else {
             $routeConfig['cosmos']['chain'] = ' defaultmodule';
         }
-        Zend_Controller_Front::getInstance()->getRouter()->addConfig(new Zend_Config($routeConfig));
+
+        $front->getRouter()->addRoute('cosmos', $cosmos);
+
+//        Zend_Controller_Front::getInstance()->getRouter()->addConfig(new Zend_Config($routeConfig));
     }
 
     /**
@@ -96,8 +115,8 @@ class ClientBootstrap extends Cosmos_Bootstrap
 
     protected function _initDumpRoutes()
     {
-        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos-test_route');
-        Zend_Debug::dump($test);
+//        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos-test_route');
         $test = Zend_Controller_Front::getInstance()->getRouter()->getRoutes();
+        Zend_Debug::dump($test);
     }
 }
