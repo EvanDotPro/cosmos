@@ -55,50 +55,41 @@ class ClientBootstrap extends Cosmos_Bootstrap
 
 
         $front = Zend_Controller_Front::getInstance();
+
         $dispatcher = $front->getDispatcher();
 
-        $defaultRoute = new Zend_Controller_Router_Route_Module();
 
         $defaults = array('controller'  => $dispatcher->getDefaultControllerName(),
                           'action'      => $dispatcher->getDefaultAction(),
                           'module'      => $dispatcher->getDefaultModule()
                     );
-
-        $hostnameRoute = new Zend_Controller_Router_Route_Hostname($requestedHost);
-
+        $defaultRoute = new Zend_Controller_Router_Route_Module($defaults);
+        Zend_Registry::set('defaultRoute',$defaultRoute);
         $routeConfig = array();
-//        $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Module';
-        $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Hostname';
-        $routeConfig['defaultmodule']['route'] = $requestedHost;
         if($store = Cosmos_Api::get()->cosmos->getStoreByHostPath($requestedHost, $requestedPath)){
             if($store['path']){
-                $pathRoute = new Zend_Controller_Router_Route($store['path'],$defaults);
-                $cosmos = $defaultRoute->chain($pathRoute,'');
-                $routeConfig['defaultroute']['type'] = 'Zend_Controller_Router_Route_Module';
-                $routeConfig['pathroute']['type'] = 'Zend_Controller_Router_Route';
-                $routeConfig['pathroute']['route'] = $store['path'];
-                $routeConfig['pathroute']['defaults']['controller'] = 'index';
-                $routeConfig['pathroute']['defaults']['action'] = 'index';
+                Zend_Debug::dump($store['path']);
+                $pathRoute = new Zend_Controller_Router_Route(':path',array('path'=>$store['path']));
+                $cosmos = clone $pathRoute;
+                $front->getRouter()->addRoute('cosmos', $pathRoute->chain($defaultRoute));
+//                $cosmos = $pathRoute;
+                Zend_Registry::set('mode','path');
             } else {
-//                $routeConfig['defaultmodule']['type'] = 'Zend_Controller_Router_Route_Module';
+        $front->getRouter()->removeDefaultRoutes();
+//                $hostnameRoute = new Zend_Controller_Router_Route_Hostname($requestedHost);
+//                $cosmos = $hostnameRoute->chain($defaultRoute);
 
-                $routeConfig['hostroute']['type'] = 'Zend_Controller_Router_Route_Hostname';
-                $routeConfig['hostroute']['route'] = $requestedHost;
+                $cosmos = $defaultRoute;
+
+                Zend_Registry::set('mode','host');
+            $front->getRouter()->addRoute('cosmos', $cosmos);
             }
         } else {
             die('fail');
             // no matching store?
         }
-
-        $routeConfig['cosmos']['type'] = 'Zend_Controller_Router_Route_Chain';
-        if(isset($routeConfig['pathroute'])){
-            $routeConfig['cosmos']['chain'] = 'defaultmodule,pathroute';
-        } else {
-            $routeConfig['cosmos']['chain'] = ' defaultmodule';
-        }
-
-        $front->getRouter()->addRoute('cosmos', $cosmos);
-
+        Zend_Registry::set('cosmosRoute', $cosmos);
+//        $front->getRouter()->addRoute('cosmos', $cosmos);
 //        Zend_Controller_Front::getInstance()->getRouter()->addConfig(new Zend_Config($routeConfig));
     }
 
@@ -115,8 +106,12 @@ class ClientBootstrap extends Cosmos_Bootstrap
 
     protected function _initDumpRoutes()
     {
+
+//        Zend_Controller_Front::getInstance()->getRouter()->addRoute('cosmos', Zend_Registry::get('cosmosRoute')->chain(Zend_Registry::get('defaultRoute')));
 //        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos-test_route');
+//        Zend_Debug::dump($test);
+//        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos');
         $test = Zend_Controller_Front::getInstance()->getRouter()->getRoutes();
-        Zend_Debug::dump($test);
+//        Zend_Debug::dump($test);
     }
 }

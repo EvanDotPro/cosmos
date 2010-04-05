@@ -191,13 +191,19 @@ class Cosmos_Addon
     {
         $router = Zend_Controller_Front::getInstance()->getRouter();
         $chainNameSeparator = $router->getChainNameSeparator();
-        $cosmos = $router->getRoute('cosmos');
-        $router->addConfig(new Zend_Config($routesConfig));
         foreach($routesConfig as $routeName => $config){
-            $route = $router->getRoute($routeName);
-            $chain = $cosmos->chain($route);
+            $class = (isset($config['type'])) ? $config['type'] : 'Zend_Controller_Router_Route';
+            $route = call_user_func(array($class, 'getInstance'), new Zend_Config($config));
+//            $cosmos = clone $router->getRoute('cosmos');
+            $cosmos = clone Zend_Registry::get('cosmosRoute');
+//            $chain = $cosmos->chain($route,'');
             $chainName = 'cosmos'.$chainNameSeparator.$routeName;
-            $router->addRoute($chainName, $chain);
+            if(Zend_Registry::get('mode') == 'host'){
+                $router->addRoute($chainName, $route);
+            } else {
+                $chain = $cosmos->chain($route);
+                $router->addRoute($chainName, $chain);
+            }
         }
     }
 
