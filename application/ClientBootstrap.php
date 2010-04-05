@@ -47,50 +47,34 @@ class ClientBootstrap extends Cosmos_Bootstrap
 
     protected function _initStoreRoutes()
     {
-        $this->bootstrap('frontcontroller');
         $request = new Zend_Controller_Request_Http();
         $path = explode('/',trim($request->getPathInfo(),'/'));
         $requestedPath = array_shift($path);
         $requestedHost = $request->getHttpHost();
 
-
-        $front = Zend_Controller_Front::getInstance();
-
-        $dispatcher = $front->getDispatcher();
-
-
-        $defaults = array('controller'  => $dispatcher->getDefaultControllerName(),
-                          'action'      => $dispatcher->getDefaultAction(),
-                          'module'      => $dispatcher->getDefaultModule()
-                    );
-        $defaultRoute = new Zend_Controller_Router_Route_Module($defaults);
-        Zend_Registry::set('defaultRoute',$defaultRoute);
-        $routeConfig = array();
         if($store = Cosmos_Api::get()->cosmos->getStoreByHostPath($requestedHost, $requestedPath)){
             if($store['path']){
-                Zend_Debug::dump($store['path']);
-                $pathRoute = new Zend_Controller_Router_Route(':path',array('path'=>$store['path']));
-                $cosmos = clone $pathRoute;
-                $front->getRouter()->addRoute('cosmos', $pathRoute->chain($defaultRoute));
-//                $cosmos = $pathRoute;
+                $this->bootstrap('frontcontroller');
+                $front = Zend_Controller_Front::getInstance();
+                $request = $front->getRequest();
+                $dispatcher = $front->getDispatcher();
+                $defaultRoute = new Zend_Controller_Router_Route_Module(array(), $dispatcher, $request);
+                $front->getRouter()->removeDefaultRoutes();
+                $defaults = array('path'    =>$store['path'],
+                                  'module'  => $dispatcher->getDefaultModule());
+                $pathRoute = new Zend_Controller_Router_Route(':path',$defaults);
+                Zend_Registry::set('cosmosRoute', $pathRoute);
+                // This is to catch empty requests because for some reason 'default' doesn't.
+                $front->getRouter()->addRoute('default-empty', $pathRoute);
+                $front->getRouter()->addRoute('default', $pathRoute->chain($defaultRoute));
                 Zend_Registry::set('mode','path');
             } else {
-        $front->getRouter()->removeDefaultRoutes();
-//                $hostnameRoute = new Zend_Controller_Router_Route_Hostname($requestedHost);
-//                $cosmos = $hostnameRoute->chain($defaultRoute);
-
-                $cosmos = $defaultRoute;
-
                 Zend_Registry::set('mode','host');
-            $front->getRouter()->addRoute('cosmos', $cosmos);
             }
         } else {
             die('fail');
             // no matching store?
         }
-        Zend_Registry::set('cosmosRoute', $cosmos);
-//        $front->getRouter()->addRoute('cosmos', $cosmos);
-//        Zend_Controller_Front::getInstance()->getRouter()->addConfig(new Zend_Config($routeConfig));
     }
 
     /**
@@ -102,16 +86,5 @@ class ClientBootstrap extends Cosmos_Bootstrap
     protected function _initAddons()
     {
         Cosmos_Addon::getInstance();
-    }
-
-    protected function _initDumpRoutes()
-    {
-
-//        Zend_Controller_Front::getInstance()->getRouter()->addRoute('cosmos', Zend_Registry::get('cosmosRoute')->chain(Zend_Registry::get('defaultRoute')));
-//        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos-test_route');
-//        Zend_Debug::dump($test);
-//        $test = Zend_Controller_Front::getInstance()->getRouter()->assemble(array(), 'cosmos');
-        $test = Zend_Controller_Front::getInstance()->getRouter()->getRoutes();
-//        Zend_Debug::dump($test);
     }
 }

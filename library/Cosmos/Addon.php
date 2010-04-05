@@ -127,10 +127,8 @@ class Cosmos_Addon
             Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view->addScriptPath($defaultModuleDirectory . '/views/layouts');
         }
 
-
         foreach ($this->_addons as $addonName => $addon) {
             $addonDir = $addon['directory'];
-
 
             // Add extended module stuff...
             if (isset($addon['config']['modules']['extended']['ext_' . $moduleName])) {
@@ -195,12 +193,12 @@ class Cosmos_Addon
             $class = (isset($config['type'])) ? $config['type'] : 'Zend_Controller_Router_Route';
             $route = call_user_func(array($class, 'getInstance'), new Zend_Config($config));
 //            $cosmos = clone $router->getRoute('cosmos');
-            $cosmos = clone Zend_Registry::get('cosmosRoute');
 //            $chain = $cosmos->chain($route,'');
             $chainName = 'cosmos'.$chainNameSeparator.$routeName;
             if(Zend_Registry::get('mode') == 'host'){
                 $router->addRoute($chainName, $route);
             } else {
+                $cosmos = clone Zend_Registry::get('cosmosRoute');
                 $chain = $cosmos->chain($route);
                 $router->addRoute($chainName, $chain);
             }
