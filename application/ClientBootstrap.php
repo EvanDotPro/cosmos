@@ -53,6 +53,7 @@ class ClientBootstrap extends Cosmos_Bootstrap
         $requestedHost = $request->getHttpHost();
 
         if($store = Cosmos_Api::get()->cosmos->getStoreByHostPath($requestedHost, $requestedPath)){
+            Zend_Registry::get('log')->info($store);
             if($store['path']){
                 $this->bootstrap('frontcontroller');
                 $front = Zend_Controller_Front::getInstance();
@@ -75,16 +76,6 @@ class ClientBootstrap extends Cosmos_Bootstrap
             die('fail');
             // no matching store?
         }
-    }
-
-    /**
-     * Instantiates the Cosmos addon loader.
-     * NOTE: This must be ran _AFTER_ the API client is set up.
-     *
-     * @return void
-     */
-    protected function _initAddons()
-    {
-        Cosmos_Addon::getInstance();
+        Cosmos_Addon::getInstance($store['addons']);
     }
 }

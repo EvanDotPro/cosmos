@@ -35,9 +35,9 @@ class Cosmos_Addon
      *
      * @return void
      */
-    protected function __construct()
+    protected function __construct($addons = false)
     {
-        $this->_setAddons();
+        $this->_setAddons($addons);
 
         foreach($this->_addons as $addonName => $addon){
             $addonDir = $addon['directory'];
@@ -89,10 +89,10 @@ class Cosmos_Addon
      *
      * @return Cosmos_Addon
      */
-    public static function getInstance()
+    public static function getInstance($addons = false)
     {
         if (null === self::$_instance) {
-            self::$_instance = new self();
+            self::$_instance = new self($addons);
         }
 
         return self::$_instance;
@@ -168,9 +168,8 @@ class Cosmos_Addon
         }
     }
 
-    protected function _setAddons()
+    protected function _setAddons($addons)
     {
-        $addons = Cosmos_Api::get()->cosmos->listEnabledAddons();
         $addonsDir = APPLICATION_PATH . '/addons';
         $this->_addons = array();
         foreach($addons as $addonName){
